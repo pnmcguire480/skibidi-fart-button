@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKIBIDI FART GENERATOR 💀</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bungee+Shade&family=Creepster&display=swap');
+
+  :root {
+    --cyan: #00ffff;
+    --magenta: #ff00ff;
+    --toxic-green: #39ff14;
+    --chaos-yellow: #ffff00;
+    --bg-dark: #0a0012;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Bangers', cursive;
+    transition: transform 0.5s ease;
+    position: relative;
+  }
+
+  body.skibidi-mode {
+    transform: rotate(180deg);
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 48px, rgba(0,255,255,0.05) 48px, rgba(0,255,255,0.05) 50px),
+      repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,0,255,0.05) 48px, rgba(255,0,255,0.05) 50px);
+    animation: gridPulse 2s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Floating toilet emojis */
+  .toilet-float {
+    position: fixed;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: floatToilet linear infinite;
+    pointer-events: none;
+    z-index: 1;
+    filter: drop-shadow(0 0 8px var(--magenta));
+  }
+
+  @keyframes floatToilet {
+    0% { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-10vh) rotate(720deg); }
+  }
+
+  /* Notification banner */
+  .notification {
+    position: fixed;
+    top: -60px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, var(--magenta), var(--cyan));
+    color: #000;
+    text-align: center;
+    padding: 14px;
+    font-family: 'Creepster', cursive;
+    font-size: 1.3rem;
+    z-index: 100;
+    transition: top 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .notification.show {
+    top: 0;
+  }
+
+  /* Main container */
+  .container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  /* Title */
+  .title {
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    text-align: center;
+    background: linear-gradient(45deg, var(--cyan), var(--magenta), var(--chaos-yellow), var(--toxic-green));
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleShift 2s ease infinite;
+    filter: drop-shadow(0 0 20px rgba(255,0,255,0.5));
+    line-height: 1.2;
+  }
+
+  @keyframes titleShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .subtitle {
+    font-family: 'Creepster', cursive;
+    color: var(--toxic-green);
+    font-size: 1rem;
+    text-align: center;
+    animation: subtitleGlitch 3s infinite;
+    text-shadow: 0 0 10px var(--toxic-green);
+  }
+
+  @keyframes subtitleGlitch {
+    0%, 92%, 100% { transform: translate(0); opacity: 1; }
+    93% { transform: translate(-5px, 2px); opacity: 0.8; }
+    94% { transform: translate(5px, -2px); opacity: 0.6; }
+    95% { transform: translate(-3px, -1px); opacity: 0.9; }
+    96% { transform: translate(0); opacity: 1; }
+  }
+
+  /* FART BUTTON */
+  .fart-btn {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 4px solid var(--cyan);
+    background: radial-gradient(circle at 30% 30%, #2a0040, #0a0012);
+    cursor: pointer;
+    position: relative;
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: var(--cyan);
+    text-shadow: 0 0 20px var(--cyan);
+    box-shadow:
+      0 0 30px rgba(0,255,255,0.3),
+      0 0 60px rgba(255,0,255,0.2),
+      inset 0 0 30px rgba(0,255,255,0.1);
+    transition: all 0.1s;
+    animation: buttonPulse 1.5s ease-in-out infinite;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .fart-btn:hover {
+    border-color: var(--magenta);
+    color: var(--magenta);
+    text-shadow: 0 0 30px var(--magenta);
+    box-shadow:
+      0 0 50px rgba(255,0,255,0.5),
+      0 0 100px rgba(0,255,255,0.3),
+      inset 0 0 40px rgba(255,0,255,0.2);
+  }
+
+  .fart-btn:active {
+    transform: scale(0.9);
+    box-shadow:
+      0 0 80px rgba(255,0,255,0.8),
+      0 0 150px rgba(0,255,255,0.5);
+  }
+
+  @keyframes buttonPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(0,255,255,0.3), 0 0 60px rgba(255,0,255,0.2); }
+    50% { box-shadow: 0 0 50px rgba(0,255,255,0.5), 0 0 90px rgba(255,0,255,0.4); }
+  }
+
+  .fart-btn .toilet-icon {
+    font-size: 4rem;
+    display: block;
+    animation: toiletWobble 0.5s ease-in-out infinite;
+  }
+
+  @keyframes toiletWobble {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  /* Fart counter */
+  .fart-counter {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: var(--chaos-yellow);
+    text-shadow: 0 0 15px var(--chaos-yellow);
+    text-align: center;
+  }
+
+  .fart-counter span {
+    font-size: 3rem;
+    display: block;
+    animation: counterBounce 0.3s ease;
+  }
+
+  @keyframes counterBounce {
+    0% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+  }
+
+  /* SKIBIDI MODE button */
+  .skibidi-btn {
+    font-family: 'Creepster', cursive;
+    font-size: 1.2rem;
+    padding: 12px 30px;
+    border: 2px solid var(--toxic-green);
+    background: transparent;
+    color: var(--toxic-green);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-shadow: 0 0 10px var(--toxic-green);
+  }
+
+  .skibidi-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--toxic-green);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    z-index: -1;
+  }
+
+  .skibidi-btn:hover {
+    color: #000;
+  }
+
+  .skibidi-btn:hover::before {
+    transform: translateX(0);
+  }
+
+  .skibidi-btn.active {
+    background: var(--toxic-green);
+    color: #000;
+    animation: skibidiFlash 0.2s infinite;
+  }
+
+  @keyframes skibidiFlash {
+    0%, 100% { background: var(--toxic-green); color: #000; }
+    50% { background: var(--magenta); color: #fff; border-color: var(--magenta); }
+  }
+
+  /* Chaos text that floats around */
+  .chaos-text {
+    position: fixed;
+    font-family: 'Bangers', cursive;
+    pointer-events: none;
+    z-index: 50;
+    animation: chaosFloat 2s ease-out forwards;
+    text-shadow: 0 0 10px currentColor;
+  }
+
+  @keyframes chaosFloat {
+    0% { transform: scale(0.5) rotate(0deg); opacity: 1; }
+    100% { transform: scale(2) rotate(360deg) translateY(-200px); opacity: 0; }
+  }
+
+  /* Screen shake */
+  @keyframes screenShake {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-8px, 5px); }
+    20% { transform: translate(8px, -5px); }
+    30% { transform: translate(-5px, 8px); }
+    40% { transform: translate(5px, -8px); }
+    50% { transform: translate(-8px, -5px); }
+    60% { transform: translate(8px, 5px); }
+    70% { transform: translate(-5px, -8px); }
+    80% { transform: translate(5px, 8px); }
+    90% { transform: translate(-8px, 5px); }
+  }
+
+  body.shaking {
+    animation: screenShake 0.4s ease;
+  }
+
+  /* Fart cloud particles */
+  .fart-cloud {
+    position: fixed;
+    font-size: 3rem;
+    pointer-events: none;
+    z-index: 40;
+    animation: cloudRise 1.5s ease-out forwards;
+  }
+
+  @keyframes cloudRise {
+    0% { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(3) translateY(-100px); opacity: 0; }
+  }
+
+  /* Volume meter */
+  .volume-meter {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 40px;
+  }
+
+  .volume-bar {
+    width: 8px;
+    background: var(--cyan);
+    border-radius: 2px;
+    transition: height 0.1s;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  /* Bloom overlay */
+  .bloom-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(255,0,255,0.3), transparent 70%);
+    transition: opacity 0.2s;
+  }
+
+  .bloom-overlay.flash {
+    opacity: 1;
+  }
+
+  /* Footer */
+  .footer {
+    position: fixed;
+    bottom: 10px;
+    font-family: 'Creepster', cursive;
+    color: rgba(255,0,255,0.3);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    z-index: 10;
+  }
+
+  /* Stink lines around button */
+  .stink-lines {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .stink-line {
+    position: absolute;
+    width: 3px;
+    height: 30px;
+    background: var(--toxic-green);
+    border-radius: 3px;
+    opacity: 0;
+    box-shadow: 0 0 8px var(--toxic-green);
+  }
+
+  .stink-line.visible {
+    animation: stinkWave 0.8s ease-out forwards;
+  }
+
+  @keyframes stinkWave {
+    0% { opacity: 0.8; transform: translateY(0) scaleY(1); }
+    100% { opacity: 0; transform: translateY(-40px) scaleY(1.5); }
+  }
+
+  /* Ohio stamp */
+  .ohio-stamp {
+    position: fixed;
+    font-family: 'Bungee Shade', cursive;
+    font-size: 5rem;
+    color: var(--chaos-yellow);
+    text-shadow: 0 0 30px var(--chaos-yellow);
+    pointer-events: none;
+    z-index: 80;
+    animation: ohioSlam 0.8s ease-out forwards;
+  }
+
+  @keyframes ohioSlam {
+    0% { transform: scale(5) rotate(-20deg); opacity: 0; }
+    20% { transform: scale(1) rotate(5deg); opacity: 1; }
+    30% { transform: scale(1.1) rotate(-2deg); opacity: 1; }
+    40% { transform: scale(1) rotate(0deg); opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: scale(0.8) rotate(10deg); }
+  }
+
+  /* Status display */
+  .status {
+    font-family: 'Creepster', cursive;
+    font-size: 1rem;
+    color: var(--magenta);
+    text-align: center;
+    min-height: 1.5em;
+    text-shadow: 0 0 8px var(--magenta);
+    animation: statusPulse 2s infinite;
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    .fart-btn { width: 160px; height: 160px; }
+    .fart-btn .toilet-icon { font-size: 3rem; }
+    .title { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="notification" id="notification">🚽 THE TOILET IS WATCHING 🚽</div>
+<div class="bloom-overlay" id="bloom"></div>
+
+<div class="container">
+  <h1 class="title">SKIBIDI FART<br>GENERATOR</h1>
+  <p class="subtitle">Your phone is now a sentient toilet that laughs at its own existence</p>
+
+  <div style="position: relative;">
+    <div class="stink-lines" id="stinkLines"></div>
+    <button class="fart-btn" id="fartBtn" ontouchstart="">
+      <span class="toilet-icon">🚽</span>
+      FART
+    </button>
+  </div>
+
+  <div class="volume-meter" id="volumeMeter"></div>
+
+  <div class="fart-counter">
+    FARTS GENERATED
+    <span id="fartCount">0</span>
+  </div>
+
+  <p class="status" id="status">tap the toilet... if you dare</p>
+
+  <button class="skibidi-btn" id="skibidiBtn">⚡ SKIBIDI MODE ⚡</button>
+</div>
+
+<div class="footer">© 2026 OHIO FART INDUSTRIES • ALL RIGHTS RESERVED IN OHIO</div>
+
+<script>
+  // ===== AUDIO ENGINE =====
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx;
+
+  function ensureAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+
+  // Generate a fart sound with oscillators
+  function generateFart(pitch = 1, duration = 0.4) {
+    ensureAudio();
+    const now = audioCtx.currentTime;
+
+    // Main fart oscillator
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80 * pitch, now);
+    osc.frequency.exponentialRampToValueAtTime(40 * pitch, now + duration);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(300, now);
+    filter.frequency.exponentialRampToValueAtTime(100, now + duration);
+    filter.Q.value = 5;
+
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + duration);
+
+    // Noise layer for texture
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * 0.3;
+    }
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = buffer;
+    const noiseGain = audioCtx.createGain();
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 200 * pitch;
+    noiseFilter.Q.value = 2;
+    noiseGain.gain.setValueAtTime(0.15, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+
+    // Sub bass rumble
+    const sub = audioCtx.createOscillator();
+    const subGain = audioCtx.createGain();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(40 * pitch, now);
+    sub.frequency.exponentialRampToValueAtTime(20, now + duration);
+    subGain.gain.setValueAtTime(0.3, now);
+    subGain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+    sub.connect(subGain);
+    subGain.connect(audioCtx.destination);
+    sub.start(now);
+    sub.stop(now + duration);
+
+    return duration;
+  }
+
+  // Toilet flush sound
+  function playFlush() {
+    ensureAudio();
+    const now = audioCtx.currentTime;
+    const duration = 1.5;
+
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      const t = i / audioCtx.sampleRate;
+      const swirl = Math.sin(t * 50 * Math.PI * (1 - t / duration)) * 0.3;
+      const noise = (Math.random() * 2 - 1) * 0.2 * (1 - t / duration);
+      data[i] = (swirl + noise) * Math.max(0, 1 - t / duration);
+    }
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 800;
+    source.connect(filter);
+    filter.connect(audioCtx.destination);
+    source.start(now);
+  }
+
+  // Distorted laugh
+  function playLaugh() {
+    ensureAudio();
+    const now = audioCtx.currentTime;
+    for (let i = 0; i < 5; i++) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(300 + Math.random() * 200, now + i * 0.12);
+      osc.frequency.exponentialRampToValueAtTime(150, now + i * 0.12 + 0.1);
+      gain.gain.setValueAtTime(0.08, now + i * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + i * 0.12);
+      osc.stop(now + i * 0.12 + 0.12);
+    }
+  }
+
+  // "OHIO" voice (robotic)
+  function playOhio() {
+    ensureAudio();
+    const now = audioCtx.currentTime;
+    // O
+    const vowels = [
+      { freq: 250, formant: 700, t: 0, dur: 0.15 },
+      { freq: 200, formant: 1200, t: 0.17, dur: 0.12 },
+      { freq: 180, formant: 500, t: 0.31, dur: 0.12 },
+      { freq: 250, formant: 700, t: 0.45, dur: 0.2 },
+    ];
+    vowels.forEach(v => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+      osc.type = 'sawtooth';
+      osc.frequency.value = v.freq;
+      filter.type = 'bandpass';
+      filter.frequency.value = v.formant;
+      filter.Q.value = 8;
+      gain.gain.setValueAtTime(0.12, now + v.t);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + v.t + v.dur);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + v.t);
+      osc.stop(now + v.t + v.dur + 0.05);
+    });
+  }
+
+  // Scream sound
+  function playScream() {
+    ensureAudio();
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.linearRampToValueAtTime(1200, now + 0.3);
+    osc.frequency.linearRampToValueAtTime(600, now + 0.6);
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.linearRampToValueAtTime(0.15, now + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+    const distortion = audioCtx.createWaveShaper();
+    const curve = new Float32Array(256);
+    for (let i = 0; i < 256; i++) {
+      const x = (i * 2) / 256 - 1;
+      curve[i] = Math.tanh(x * 3);
+    }
+    distortion.curve = curve;
+    osc.connect(distortion);
+    distortion.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.8);
+  }
+
+  // ===== VISUAL EFFECTS =====
+  const chaosTexts = ['OHIO', 'SKIBIDI', '💀', '🚽', 'BRUH', 'GYATT', 'RIZZ', '💨', 'SIGMA', 'NO CAP', 'SUSSY', 'W', 'L'];
+  const colors = ['#00ffff', '#ff00ff', '#39ff14', '#ffff00', '#ff4444', '#ff8800'];
+
+  function spawnChaosText() {
+    const el = document.createElement('div');
+    el.className = 'chaos-text';
+    el.textContent = chaosTexts[Math.floor(Math.random() * chaosTexts.length)];
+    el.style.left = Math.random() * 80 + 10 + '%';
+    el.style.top = Math.random() * 60 + 20 + '%';
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
+  }
+
+  function spawnFartCloud(x, y) {
+    const clouds = ['💨', '☁️', '💀', '🤢'];
+    for (let i = 0; i < 3; i++) {
+      const el = document.createElement('div');
+      el.className = 'fart-cloud';
+      el.textContent = clouds[Math.floor(Math.random() * clouds.length)];
+      el.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+      el.style.top = (y + (Math.random() - 0.5) * 50) + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1500);
+    }
+  }
+
+  function showOhioStamp() {
+    const el = document.createElement('div');
+    el.className = 'ohio-stamp';
+    el.textContent = 'OHIO';
+    el.style.left = Math.random() * 50 + 10 + '%';
+    el.style.top = Math.random() * 50 + 20 + '%';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+
+  function flashBloom() {
+    const bloom = document.getElementById('bloom');
+    bloom.classList.add('flash');
+    setTimeout(() => bloom.classList.remove('flash'), 200);
+  }
+
+  function shakeScreen() {
+    document.body.classList.add('shaking');
+    setTimeout(() => document.body.classList.remove('shaking'), 400);
+  }
+
+  // Vibration
+  function chaosVibrate() {
+    if (!navigator.vibrate) return;
+    const patterns = [
+      [100],
+      [50, 30, 50],
+      [200, 50, 200, 50, 200],
+      [500],
+      [30, 20, 30, 20, 30, 20, 100],
+      [50, 10, 50, 10, 300],
+      [1000],
+    ];
+    navigator.vibrate(patterns[Math.floor(Math.random() * patterns.length)]);
+  }
+
+  // Stink lines
+  function showStinkLines() {
+    const container = document.getElementById('stinkLines');
+    container.innerHTML = '';
+    const count = 6;
+    for (let i = 0; i < count; i++) {
+      const line = document.createElement('div');
+      line.className = 'stink-line visible';
+      const angle = (i / count) * 360;
+      const rad = angle * Math.PI / 180;
+      const r = 110;
+      line.style.left = (130 + Math.cos(rad) * r - 1.5) + 'px';
+      line.style.top = (130 + Math.sin(rad) * r - 15) + 'px';
+      line.style.transform = `rotate(${angle - 90}deg)`;
+      line.style.animationDelay = (i * 0.05) + 's';
+      container.appendChild(line);
+    }
+  }
+
+  // Notification
+  function showNotification() {
+    const msgs = [
+      '🚽 THE TOILET IS WATCHING 🚽',
+      '⚠️ OHIO DETECTED ⚠️',
+      '💀 FART LEVEL: MAXIMUM 💀',
+      '🧠 BRAIN ROT INTENSIFIES 🧠',
+      '⚡ SKIBIDI TOILET APPROVES ⚡',
+      '🔊 YOUR NEIGHBORS HEARD THAT 🔊',
+      '💨 CRITICAL FART MASS REACHED 💨',
+    ];
+    const el = document.getElementById('notification');
+    el.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // Volume meter
+  function initVolumeMeter() {
+    const meter = document.getElementById('volumeMeter');
+    for (let i = 0; i < 12; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'volume-bar';
+      bar.style.height = '4px';
+      meter.appendChild(bar);
+    }
+  }
+
+  function animateVolumeMeter(intensity) {
+    const bars = document.querySelectorAll('.volume-bar');
+    const animate = () => {
+      bars.forEach((bar, i) => {
+        const h = Math.random() * 35 * intensity + 4;
+        bar.style.height = h + 'px';
+        bar.style.background = h > 25 ? '#ff00ff' : h > 15 ? '#ffff00' : '#00ffff';
+        bar.style.boxShadow = `0 0 8px ${bar.style.background}`;
+      });
+    };
+    animate();
+    const interval = setInterval(animate, 80);
+    setTimeout(() => {
+      clearInterval(interval);
+      bars.forEach(bar => {
+        bar.style.height = '4px';
+        bar.style.background = '#00ffff';
+      });
+    }, 800 * intensity);
+  }
+
+  // Status messages
+  const statuses = [
+    'the toilet grows stronger...',
+    'fart energy: MAXIMUM',
+    'ohio reverberates through the void',
+    'skibidi toilet nods approvingly',
+    'your brain cells are leaving the chat',
+    'the toilet... it speaks...',
+    'fart resonance achieved',
+    'congratulations, you did it. you farted.',
+    'the toilet hungers for more',
+    'sigma fart detected',
+    'that one had rizz ngl',
+    'W fart fr fr',
+  ];
+
+  // ===== FLOATING TOILETS =====
+  function spawnFloatingToilets() {
+    for (let i = 0; i < 8; i++) {
+      const toilet = document.createElement('div');
+      toilet.className = 'toilet-float';
+      toilet.textContent = '🚽';
+      toilet.style.left = Math.random() * 90 + '%';
+      toilet.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+      toilet.style.animationDuration = (Math.random() * 10 + 8) + 's';
+      toilet.style.animationDelay = (Math.random() * -15) + 's';
+      document.body.appendChild(toilet);
+    }
+  }
+
+  // ===== MAIN LOGIC =====
+  let fartCount = 0;
+  let isSkibidiMode = false;
+  let isFarting = false;
+
+  async function doFartSequence() {
+    if (isFarting) return;
+    isFarting = true;
+
+    const btn = document.getElementById('fartBtn');
+    const numFarts = Math.floor(Math.random() * 7) + 1;
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    for (let i = 0; i < numFarts; i++) {
+      const pitch = Math.random() * 1.5 + 0.5;
+      const dur = Math.random() * 0.5 + 0.2;
+      generateFart(pitch, dur);
+
+      // Random chaos layers
+      if (Math.random() > 0.6) playFlush();
+      if (Math.random() > 0.7) playLaugh();
+      if (Math.random() > 0.75) { playOhio(); showOhioStamp(); }
+      if (Math.random() > 0.8) playScream();
+
+      spawnFartCloud(cx, cy);
+      spawnChaosText();
+      showStinkLines();
+      shakeScreen();
+      flashBloom();
+      chaosVibrate();
+      animateVolumeMeter(numFarts / 3);
+
+      fartCount++;
+      const counter = document.getElementById('fartCount');
+      counter.textContent = fartCount;
+      counter.style.animation = 'none';
+      counter.offsetHeight;
+      counter.style.animation = 'counterBounce 0.3s ease';
+
+      if (Math.random() > 0.5) showNotification();
+
+      await new Promise(r => setTimeout(r, (dur + Math.random() * 0.3) * 1000));
+    }
+
+    document.getElementById('status').textContent = statuses[Math.floor(Math.random() * statuses.length)];
+    isFarting = false;
+  }
+
+  // Skibidi Mode
+  function toggleSkibidiMode() {
+    const btn = document.getElementById('skibidiBtn');
+    if (isSkibidiMode) return;
+    isSkibidiMode = true;
+    btn.classList.add('active');
+    document.body.classList.add('skibidi-mode');
+
+    // Extra chaos during skibidi mode
+    playScream();
+    playOhio();
+    showOhioStamp();
+    chaosVibrate();
+
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => spawnChaosText(), i * 300);
+    }
+
+    setTimeout(() => {
+      isSkibidiMode = false;
+      btn.classList.remove('active');
+      document.body.classList.remove('skibidi-mode');
+      document.getElementById('status').textContent = 'skibidi mode: deactivated (for now...)';
+    }, 10000);
+  }
+
+  // Event listeners
+  document.getElementById('fartBtn').addEventListener('click', doFartSequence);
+  document.getElementById('skibidiBtn').addEventListener('click', toggleSkibidiMode);
+
+  // Init
+  spawnFloatingToilets();
+  initVolumeMeter();
+
+  // Random notifications
+  setInterval(() => {
+    if (Math.random() > 0.7) showNotification();
+  }, 15000);
+</script>
+</body>
+</html>
